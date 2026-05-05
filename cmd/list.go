@@ -5,6 +5,7 @@ import (
 
 	"github.com/mingyuans/claude-profile-switch/internal/config"
 	"github.com/mingyuans/claude-profile-switch/internal/output"
+	"github.com/mingyuans/claude-profile-switch/internal/rcfile"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +27,7 @@ var listCmd = &cobra.Command{
 			return nil
 		}
 
-		liveDir := os.Getenv("CLAUDE_CONFIG_DIR")
+		liveDir := resolveLiveDir()
 		rows := make([][]string, 0, len(profiles))
 		for _, p := range profiles {
 			status := profileStatus(p, store.Current, liveDir)
@@ -41,16 +42,44 @@ var listCmd = &cobra.Command{
 	},
 }
 
+// resolveLiveDir reports the CLAUDE_CONFIG_DIR a *fresh* shell would see —
+// not whatever this shell happens to have exported. We read it from the
+// managed block in the user's rc file so `ccs list` matches what `claude`
+// would actually pick up when launched from a brand-new terminal.
+//
+// Returns "" if the rc file or block is missing, or the shell is not
+// auto-detectable: in those cases no profile is considered live, which
+// is the correct signal — nothing has been persisted.
+func resolveLiveDir() string {
+	shellName, err := resolveShellName()
+	if err != nil {
+		return ""
+	}
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	rcPath, err := rcfile.Path(shellName, home)
+	if err != nil {
+		return ""
+	}
+	dir, ok, err := rcfile.ReadExportedDir(rcPath)
+	if err != nil || !ok {
+		return ""
+	}
+	return dir
+}
+
 // profileStatus returns the value rendered in the ACTIVE column.
 //
-//   - "live"    — p.Dir matches the current shell's $CLAUDE_CONFIG_DIR, i.e.
-//     this is the profile actually in effect right now.
+//   - "live"    — p.Dir matches the CLAUDE_CONFIG_DIR persisted in the
+//     user's rc file; a freshly opened shell will run on this profile.
 //   - "current" — p was the target of the most recent `ccs use`, but the
-//     shell environment doesn't currently match (no integration installed,
-//     new terminal, manual override, etc.).
+//     rc file doesn't currently encode it (no integration installed yet,
+//     --no-rc was used, manual edit, etc.).
 //   - ""        — neither.
 //
-// "live" wins over "current" when both apply, since live shell state is the
+// "live" wins over "current" when both apply, since the rc file is the
 // stronger signal.
 func profileStatus(p config.Profile, currentName, liveDir string) string {
 	if liveDir != "" {
