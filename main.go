@@ -1,6 +1,6 @@
 package main
 
-import "github.com/aftership/ccs-cli/cmd"
+import "github.com/mingyuans/claude-profile-switch/cmd"
 
 func main() {
 	cmd.Execute()

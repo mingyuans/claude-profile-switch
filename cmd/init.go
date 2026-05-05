@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/aftership/ccs-cli/internal/output"
-	"github.com/aftership/ccs-cli/internal/shellfs"
+	"github.com/mingyuans/claude-profile-switch/internal/output"
+	"github.com/mingyuans/claude-profile-switch/internal/shellfs"
 	"github.com/spf13/cobra"
 )
 

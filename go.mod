@@ -1,4 +1,4 @@
-module github.com/aftership/ccs-cli
+module github.com/mingyuans/claude-profile-switch
 
 go 1.24.4
 

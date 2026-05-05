@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aftership/ccs-cli/internal/config"
-	"github.com/aftership/ccs-cli/internal/output"
+	"github.com/mingyuans/claude-profile-switch/internal/config"
+	"github.com/mingyuans/claude-profile-switch/internal/output"
 	"github.com/spf13/cobra"
 )
 

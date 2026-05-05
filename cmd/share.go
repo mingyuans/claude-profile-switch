@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aftership/ccs-cli/internal/output"
+	"github.com/mingyuans/claude-profile-switch/internal/output"
 )
 
 // sharedItems lists the entries we symlink from ~/.claude into a freshly

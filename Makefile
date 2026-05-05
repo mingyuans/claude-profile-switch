@@ -1,5 +1,5 @@
 BINARY       := ccs-cli
-PKG          := github.com/aftership/ccs-cli
+PKG          := github.com/mingyuans/claude-profile-switch
 BIN_DIR      := bin
 DIST_DIR     := dist
 INSTALL_DIR  ?= /usr/local/bin

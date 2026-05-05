@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/aftership/ccs-cli/internal/config"
+	"github.com/mingyuans/claude-profile-switch/internal/config"
 )
 
 // runAdd invokes the add command's RunE closure directly so tests stay

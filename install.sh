@@ -2,16 +2,16 @@
 # ccs-cli installer.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
 #   curl -fsSL .../install.sh | bash -s -- --version v0.1.0 --bin-dir ~/.local/bin
 #
 # Environment overrides (equivalent to flags):
-#   CCS_REPO     repo slug,  default aftership/ccs-cli
+#   CCS_REPO     repo slug,  default mingyuans/claude-profile-switch
 #   CCS_VERSION  release tag, default latest
 #   CCS_BIN_DIR  install dir, default /usr/local/bin (falls back to ~/.local/bin)
 set -euo pipefail
 
-REPO="${CCS_REPO:-aftership/ccs-cli}"
+REPO="${CCS_REPO:-mingyuans/claude-profile-switch}"
 VERSION="${CCS_VERSION:-latest}"
 BIN_DIR_OVERRIDE="${CCS_BIN_DIR:-}"
 
@@ -20,13 +20,13 @@ usage() {
 ccs-cli installer
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
   bash install.sh [--version <tag>] [--bin-dir <path>] [--repo <owner/name>]
 
 Flags / env vars:
   --version, CCS_VERSION   release tag (default: latest)
   --bin-dir, CCS_BIN_DIR   install dir  (default: /usr/local/bin, fallback ~/.local/bin)
-  --repo,    CCS_REPO      repo slug   (default: aftership/ccs-cli)
+  --repo,    CCS_REPO      repo slug   (default: mingyuans/claude-profile-switch)
 EOF
 }
 

@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/aftership/ccs-cli/internal/output"
+	"github.com/mingyuans/claude-profile-switch/internal/output"
 	"github.com/spf13/cobra"
 )
 

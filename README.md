@@ -17,7 +17,7 @@ Claude Code reads its credentials, sessions and settings from `$CLAUDE_CONFIG_DI
 ### Quick install (curl | bash)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
 ```
 
 The installer detects your platform (darwin/linux × amd64/arm64), downloads the matching binary from GitHub Releases, and installs it into `/usr/local/bin` (or `~/.local/bin` if that isn't writable).
@@ -26,21 +26,21 @@ Customise via flags or env vars:
 
 ```bash
 # pin a release tag
-curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh | bash -s -- --version v0.1.0
+curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash -s -- --version v0.1.0
 
 # install to a user-local path (no sudo)
 CCS_BIN_DIR="$HOME/.local/bin" \
-  curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
 
 # install from a fork
-CCS_REPO=your-fork/ccs-cli \
-  curl -fsSL https://raw.githubusercontent.com/your-fork/ccs-cli/main/install.sh | bash
+CCS_REPO=your-fork/claude-profile-switch \
+  curl -fsSL https://raw.githubusercontent.com/your-fork/claude-profile-switch/main/install.sh | bash
 ```
 
 Prefer to inspect the script first (recommended whenever piping a remote script into a shell):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/aftership/ccs-cli/main/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh -o install.sh
 less install.sh
 bash install.sh
 ```
@@ -48,8 +48,8 @@ bash install.sh
 ### Build from source
 
 ```bash
-git clone https://github.com/aftership/ccs-cli.git
-cd ccs-cli
+git clone https://github.com/mingyuans/claude-profile-switch.git
+cd claude-profile-switch
 make build
 sudo cp bin/ccs-cli /usr/local/bin/
 ```
