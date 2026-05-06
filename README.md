@@ -1,14 +1,14 @@
-# ccs-cli
+# ccs
 
 Switch between multiple Claude Code accounts on a single machine by toggling `CLAUDE_CONFIG_DIR`.
 
-`ccs-cli` registers named profiles (each backed by its own config directory) and provides a `ccs use <name>` shortcut that takes effect **immediately in the current shell session** when paired with the auto-sourced shell wrapper.
+`ccs` registers named profiles (each backed by its own config directory) and provides a `ccs use <name>` shortcut that takes effect **immediately in the current shell session** when paired with the auto-sourced shell wrapper.
 
 ---
 
 ## Why
 
-Claude Code reads its credentials, sessions and settings from `$CLAUDE_CONFIG_DIR` (defaulting to `~/.claude`). To run multiple accounts side-by-side you need to flip that variable, but a child process can't mutate its parent shell's environment. `ccs-cli` solves this with the standard "binary + sourced shell function + `eval`" pattern (à la `pyenv`, `direnv`, `nvm`).
+Claude Code reads its credentials, sessions and settings from `$CLAUDE_CONFIG_DIR` (defaulting to `~/.claude`). To run multiple accounts side-by-side you need to flip that variable, but a child process can't mutate its parent shell's environment. `ccs` solves this with the standard "binary + sourced shell function + `eval`" pattern (à la `pyenv`, `direnv`, `nvm`).
 
 ---
 
@@ -51,17 +51,17 @@ bash install.sh
 git clone https://github.com/mingyuans/claude-profile-switch.git
 cd claude-profile-switch
 make build
-sudo cp bin/ccs-cli /usr/local/bin/
+sudo cp bin/ccs /usr/local/bin/
 ```
 
 ### Enable shell integration (one-time, all install methods)
 
 ```bash
-echo 'eval "$(ccs-cli init zsh)"' >> ~/.zshrc
+echo 'eval "$(ccs init zsh)"' >> ~/.zshrc
 exec zsh
 ```
 
-Bash and fish are also supported: `ccs-cli init bash` / `ccs-cli init fish | source`.
+Bash and fish are also supported: `ccs init bash` / `ccs init fish | source`.
 
 ---
 
@@ -139,9 +139,9 @@ ccs add isolated --no-share # fully empty profile, nothing shared
 
 ## How the live-switch works
 
-1. `ccs-cli init zsh` prints a shell function called `ccs`.
+1. `ccs init zsh` prints a shell function called `ccs`.
 2. After you `eval` it (typically from `.zshrc`), every `ccs <subcommand>` call goes through the function.
-3. For `use` / `switch`, the function runs `command ccs-cli use <name> --export`, which prints exactly one line: `export CLAUDE_CONFIG_DIR='/abs/path'`.
+3. For `use` / `switch`, the function runs `command ccs use <name> --export`, which prints exactly one line: `export CLAUDE_CONFIG_DIR='/abs/path'`. (`command` bypasses the wrapper function and invokes the binary directly, even though they share the same name.)
 4. The function `eval`s that line, mutating the **current** shell's environment.
 5. Other subcommands are forwarded to the binary unchanged.
 
@@ -178,17 +178,17 @@ make help        # list all targets
 make install     # go mod tidy
 make test        # go test ./...
 make lint        # gofmt + go vet
-make build       # produce bin/ccs-cli
-make release     # cross-compile dist/ccs-cli-{darwin,linux}-{amd64,arm64}.tar.gz
+make build       # produce bin/ccs
+make release     # cross-compile dist/ccs-{darwin,linux}-{amd64,arm64}.tar.gz
 make run ARGS="list"
 ```
 
 ### Cutting a release
 
 1. Tag and push: `git tag v0.1.0 && git push --tags`
-2. `make release` → produces `dist/ccs-cli-*.tar.gz`
+2. `make release` → produces `dist/ccs-*.tar.gz`
 3. Upload the four tarballs as assets on the GitHub Release named after the tag
-4. `install.sh` automatically picks them up via `https://github.com/$repo/releases/download/$tag/ccs-cli-$os-$arch.tar.gz`
+4. `install.sh` automatically picks them up via `https://github.com/$repo/releases/download/$tag/ccs-$os-$arch.tar.gz`
 
 ### Layout
 
@@ -208,7 +208,7 @@ make run ARGS="list"
 ## Uninstall
 
 ```bash
-sudo rm /usr/local/bin/ccs-cli
-# remove the `eval "$(ccs-cli init zsh)"` line from ~/.zshrc
+sudo rm /usr/local/bin/ccs
+# remove the `eval "$(ccs init zsh)"` line from ~/.zshrc
 rm -rf ~/.config/ccs
 ```

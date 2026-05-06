@@ -18,7 +18,7 @@ the current shell session.
 
 Source it once from your shell rc file, e.g.:
 
-  echo 'eval "$(ccs-cli init zsh)"' >> ~/.zshrc
+  echo 'eval "$(ccs init zsh)"' >> ~/.zshrc
 
 Supported shells: zsh, bash, fish.`,
 	Args:      cobra.ExactArgs(1),

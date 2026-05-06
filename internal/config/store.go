@@ -1,4 +1,4 @@
-// Package config persists ccs-cli profile registrations as JSON. The on-disk
+// Package config persists ccs profile registrations as JSON. The on-disk
 // schema is intentionally tiny — name + filesystem directory per profile —
 // because CLAUDE_CONFIG_DIR fully describes a Claude Code account.
 package config

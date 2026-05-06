@@ -1,17 +1,17 @@
-# ccs-cli bash integration. Source via: eval "$(ccs-cli init bash)"
+# ccs bash integration. Source via: eval "$(ccs init bash)"
 ccs() {
   local cmd="$1"
   case "$cmd" in
     use|switch)
       local _ccs_out
-      _ccs_out="$(command ccs-cli "$@" --export)" || return $?
+      _ccs_out="$(command ccs "$@" --export)" || return $?
       eval "$_ccs_out"
       ;;
     "")
-      command ccs-cli --help
+      command ccs --help
       ;;
     *)
-      command ccs-cli "$@"
+      command ccs "$@"
       ;;
   esac
 }

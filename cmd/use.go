@@ -27,14 +27,14 @@ Without --export this prints a human-readable confirmation and persists the
 profile name as 'current' in the on-disk store. To make the change take
 effect in the current shell, install the shell integration once:
 
-  eval "$(ccs-cli init zsh)"
+  eval "$(ccs init zsh)"
 
 After that, the wrapper function 'ccs' transparently calls the binary with
 --export and evals the resulting 'export CLAUDE_CONFIG_DIR=...' line.
 
 Use --export directly only if you are scripting:
 
-  eval "$(ccs-cli use work --export)"`,
+  eval "$(ccs use work --export)"`,
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
@@ -85,7 +85,7 @@ Use --export directly only if you are scripting:
 			r.Info("persisted to %s (managed block)", r.Dim(rcPath))
 		}
 		r.Warning("this shell still has the old value; install shell integration once:")
-		r.Plain("    %s\n", r.Bold(`eval "$(ccs-cli init zsh)"`))
+		r.Plain("    %s\n", r.Bold(`eval "$(ccs init zsh)"`))
 		return nil
 	},
 }

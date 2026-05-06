@@ -7,10 +7,10 @@ import (
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print ccs-cli version",
+	Short: "Print ccs version",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		output.Default().Println("ccs-cli %s", version)
+		output.Default().Println("ccs %s", version)
 		return nil
 	},
 }

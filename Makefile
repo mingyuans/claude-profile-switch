@@ -1,4 +1,4 @@
-BINARY       := ccs-cli
+BINARY       := ccs
 PKG          := github.com/mingyuans/claude-profile-switch
 BIN_DIR      := bin
 DIST_DIR     := dist

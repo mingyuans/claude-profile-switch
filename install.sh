@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ccs-cli installer.
+# ccs installer.
 #
 # Usage:
 #   curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
@@ -17,7 +17,7 @@ BIN_DIR_OVERRIDE="${CCS_BIN_DIR:-}"
 
 usage() {
   cat <<'EOF'
-ccs-cli installer
+ccs installer
 
 Usage:
   curl -fsSL https://raw.githubusercontent.com/mingyuans/claude-profile-switch/main/install.sh | bash
@@ -95,7 +95,7 @@ main() {
   platform="$(detect_platform)"
   version="$(resolve_version)"
   bin_dir="$(target_bin_dir)"
-  asset="ccs-cli-${platform}.tar.gz"
+  asset="ccs-${platform}.tar.gz"
   url="https://github.com/$REPO/releases/download/$version/$asset"
 
   log "platform: $platform"
@@ -108,15 +108,15 @@ main() {
   log "downloading $url"
   curl -fsSL "$url" -o "$tmp/$asset" || err "download failed: $url"
   tar -xzf "$tmp/$asset" -C "$tmp"
-  [[ -f "$tmp/ccs-cli" ]] || err "archive did not contain a 'ccs-cli' binary"
-  chmod +x "$tmp/ccs-cli"
+  [[ -f "$tmp/ccs" ]] || err "archive did not contain a 'ccs' binary"
+  chmod +x "$tmp/ccs"
 
   mkdir -p "$bin_dir" 2>/dev/null || true
-  if ! install -m 0755 "$tmp/ccs-cli" "$bin_dir/ccs-cli" 2>/dev/null; then
+  if ! install -m 0755 "$tmp/ccs" "$bin_dir/ccs" 2>/dev/null; then
     err "could not write to $bin_dir; rerun with sudo or pass --bin-dir <path>"
   fi
-  ok "installed to $bin_dir/ccs-cli"
-  ok "version: $("$bin_dir/ccs-cli" version 2>/dev/null || echo unknown)"
+  ok "installed to $bin_dir/ccs"
+  ok "version: $("$bin_dir/ccs" version 2>/dev/null || echo unknown)"
 
   case ":$PATH:" in
     *":$bin_dir:"*) ;;
@@ -125,7 +125,7 @@ main() {
 
   echo
   log "to make 'ccs use' take effect in the current shell, install the integration once:"
-  echo "      echo 'eval \"\$(ccs-cli init zsh)\"' >> ~/.zshrc && exec zsh"
+  echo "      echo 'eval \"\$(ccs init zsh)\"' >> ~/.zshrc && exec zsh"
 }
 
 main "$@"

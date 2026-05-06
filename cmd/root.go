@@ -23,9 +23,9 @@ const defaultProfileName = "default"
 // version is overridden at build time via -ldflags "-X cmd.version=...".
 var version = "dev"
 
-// rootCmd is the top-level `ccs-cli` command.
+// rootCmd is the top-level `ccs` command.
 var rootCmd = &cobra.Command{
-	Use:           "ccs-cli",
+	Use:           "ccs",
 	Short:         "Switch between Claude Code account profiles by toggling CLAUDE_CONFIG_DIR.",
 	SilenceUsage:  true,
 	SilenceErrors: true,

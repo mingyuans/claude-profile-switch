@@ -1,5 +1,5 @@
 // Package shellfs serves the ccs() shell-function templates that the
-// `ccs-cli init` subcommand emits. Keeping them as standalone files (instead
+// `ccs init` subcommand emits. Keeping them as standalone files (instead
 // of inline string literals) lets developers edit + lint them as real shell
 // scripts; the embed FS bakes them into the binary at build time.
 package shellfs

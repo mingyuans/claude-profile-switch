@@ -22,8 +22,8 @@ var ErrUnsupportedShell = errors.New("unsupported shell")
 // The strings are documented in the rendered banner so users who open
 // their rc file know which tool to blame for changes inside.
 const (
-	BeginMarker = "# >>> ccs-cli >>> managed block; updated by `ccs use`"
-	EndMarker   = "# <<< ccs-cli <<< end managed block"
+	BeginMarker = "# >>> ccs >>> managed block; updated by `ccs use`"
+	EndMarker   = "# <<< ccs <<< end managed block"
 )
 
 // Path resolves the rc file path for shell, honouring ZDOTDIR (zsh) and
