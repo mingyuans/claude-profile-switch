@@ -71,6 +71,7 @@ Bash and fish are also supported: `ccs-cli init bash` / `ccs-cli init fish | sou
 # 1. register profiles
 ccs add work                       # defaults to ~/.claude-work
 ccs add personal /path/to/dir      # custom path
+ccs register oldsetup ~/.claude-oldsetup  # adopt an existing dir as-is
 
 # 2. inspect
 ccs list
@@ -90,6 +91,7 @@ ccs rm personal --purge --yes      # also delete the directory
 | Command | Description |
 |---|---|
 | `ccs add <name> [path]` | Register a profile, auto-create the directory, and symlink shareable items from `~/.claude` (see [Sharing](#sharing-extensions-across-profiles)). `--no-create` skips dir creation, `--no-share` skips the symlinks. |
+| `ccs register <name> <path>` (alias `import`) | Register an *existing* Claude config directory under a name. Refuses to create or modify the directory; pass `--share` to opt in to symlinking shareable items from `~/.claude`. |
 | `ccs rm <name>` | Unregister a profile. `--purge --yes` also deletes its directory. |
 | `ccs list` (alias `ls`) | Show all profiles in a table. |
 | `ccs current` | Show live `$CLAUDE_CONFIG_DIR` and the last-switched profile. |
