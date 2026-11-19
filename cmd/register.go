@@ -24,7 +24,7 @@ path must exist and be a directory.
 
 Pass --share to opt in to symlinking shareable items (CLAUDE.md, agents/,
 commands/, skills/, output-styles/, keybindings.json, hooks/, plugins/,
-settings.json) from ~/.claude into the registered directory.
+settings.json, projects/) from ~/.claude into the registered directory.
 
 The profile is *not* activated by this command — run 'ccs use <name>'
 afterwards.`,

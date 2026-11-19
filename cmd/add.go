@@ -25,10 +25,10 @@ The profile is *not* activated by this command — run 'ccs use <name>'
 afterwards.
 
 By default, shareable items from ~/.claude (CLAUDE.md, agents/, commands/,
-skills/, output-styles/, keybindings.json, hooks/, plugins/, settings.json)
-are symlinked into the new profile so user-level extensions and preferences
-are reused across accounts. Credentials, sessions, projects/, todos/ and
-settings.local.json stay isolated. Pass --no-share to skip the symlink step
+skills/, output-styles/, keybindings.json, hooks/, plugins/, settings.json, projects/)
+are symlinked into the new profile so user-level extensions, preferences
+and per-project session history are reused across accounts. Credentials,
+todos/ and settings.local.json stay isolated. Pass --no-share to skip the symlink step
 entirely.`,
 	Args: cobra.RangeArgs(1, 2),
 	RunE: func(cmd *cobra.Command, args []string) error {

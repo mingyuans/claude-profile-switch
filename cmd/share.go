@@ -11,10 +11,12 @@ import (
 
 // sharedItems lists the entries we symlink from ~/.claude into a freshly
 // added profile by default. Each entry is "extension definition",
-// "installed software" or pure preference — nothing here can carry
-// account credentials or session history. Account-bound state
-// (.credentials.json, projects/, todos/, statsig/, settings.local.json,
-// session/lock files, etc.) is intentionally absent and stays per-profile.
+// "installed software", pure preference, or (projects/) per-project
+// conversation history and memory — nothing here carries account
+// credentials. Sharing projects/ lets every account list and resume the
+// same sessions (`claude --resume` / `--continue`). Account-bound state
+// (.credentials.json, todos/, statsig/, settings.local.json, lock files,
+// etc.) is intentionally absent and stays per-profile.
 //
 // Future Claude Code releases that introduce new credential or session
 // files will stay isolated automatically because the list is a whitelist.
@@ -28,6 +30,16 @@ var sharedItems = []string{
 	"hooks",
 	"plugins",
 	"settings.json",
+	"projects",
+}
+
+// ensureInSource lists whitelist directories that are created in the source
+// dir when missing, before linking. Without this a fresh ~/.claude (Claude
+// Code never ran there, or never opened a project yet) would report
+// projects/ as "missing", the profile would later create its own private
+// projects/ and sharing would silently never happen.
+var ensureInSource = map[string]bool{
+	"projects": true,
 }
 
 // shareResult captures the outcome of one whitelist entry; it lets tests
@@ -82,6 +94,12 @@ func linkSharedItems(sourceDir, targetDir string) ([]shareResult, error) {
 func linkOne(sourceAbs, targetAbs, item string) shareResult {
 	srcPath := filepath.Join(sourceAbs, item)
 	dstPath := filepath.Join(targetAbs, item)
+
+	if ensureInSource[item] {
+		if err := os.MkdirAll(srcPath, 0o755); err != nil {
+			return shareResult{Item: item, Status: "error", Reason: fmt.Sprintf("create %s: %v", srcPath, err)}
+		}
+	}
 
 	if _, err := os.Lstat(srcPath); err != nil {
 		if errors.Is(err, os.ErrNotExist) {
