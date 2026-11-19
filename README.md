@@ -54,6 +54,15 @@ make build
 sudo cp bin/ccs /usr/local/bin/
 ```
 
+### Update
+
+```bash
+ccs update            # upgrade to the latest release
+ccs update --check    # just check
+```
+
+If the binary lives in a root-owned dir such as `/usr/local/bin`, run `sudo ccs update`. Set `GITHUB_TOKEN` if you hit GitHub API rate limits.
+
 ### Enable shell integration (one-time, all install methods)
 
 ```bash
@@ -98,6 +107,7 @@ ccs rm personal --purge --yes      # also delete the directory
 | `ccs use <name>` (alias `switch`) | Activate a profile. With `--export`, prints `export CLAUDE_CONFIG_DIR=...` for `eval`. |
 | `ccs path <name>` | Print the profile's directory (script-friendly, no decoration). |
 | `ccs init <shell>` | Print shell integration script. Supports `zsh`, `bash`, `fish`. |
+| `ccs update` (alias `upgrade`) | Update the running binary to the latest GitHub release (checksum-verified, atomic swap). `--check` only reports, `--version <tag>` pins/downgrades, `--force` reinstalls or replaces a source build. |
 | `ccs version` | Print version. |
 
 ---
@@ -204,9 +214,10 @@ make run ARGS="list"
 ```
 .
 ├── main.go
-├── cmd/                   # cobra subcommands (add, rm, list, current, use, path, init, version)
+├── cmd/                   # cobra subcommands (add, rm, list, current, use, path, init, update, version)
 ├── internal/
 │   ├── config/            # JSON-backed Store; CRUD + atomic save
+│   ├── selfupdate/        # `ccs update`: fetch release, verify checksum, atomic replace
 │   ├── output/            # ▸ ✓ ! ✗ – icons, table, summary, TTY-aware colour
 │   └── shellfs/           # embed.FS for shell integration templates
 └── shell-templates*       # source shell scripts: see internal/shellfs/
