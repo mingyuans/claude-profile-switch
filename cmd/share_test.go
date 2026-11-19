@@ -170,3 +170,74 @@ func TestLinkSharedItems_SelfLinkProtection(t *testing.T) {
 		t.Errorf("source agents/ should not be a symlink after self-link guard")
 	}
 }
+
+func TestLinkSharedItems_LinksProjects(t *testing.T) {
+	src := seedSourceItems(t, "projects")
+	if err := os.MkdirAll(filepath.Join(src, "projects", "-home-me-repo"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	dst := t.TempDir()
+
+	if _, err := linkSharedItems(src, dst); err != nil {
+		t.Fatal(err)
+	}
+	target, err := os.Readlink(filepath.Join(dst, "projects"))
+	if err != nil {
+		t.Fatalf("projects should be a symlink: %v", err)
+	}
+	if target != filepath.Join(src, "projects") {
+		t.Errorf("projects target = %q, want %q", target, filepath.Join(src, "projects"))
+	}
+	// Session dirs written through either side are visible to both.
+	if _, err := os.Stat(filepath.Join(dst, "projects", "-home-me-repo")); err != nil {
+		t.Errorf("shared project dir not visible via profile: %v", err)
+	}
+}
+
+func TestLinkSharedItems_CreatesProjectsInSourceWhenMissing(t *testing.T) {
+	src := seedSourceItems(t, "agents") // fresh ~/.claude without projects/
+	dst := t.TempDir()
+
+	results, err := linkSharedItems(src, dst)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, res := range results {
+		if res.Item == "projects" && res.Status != "linked" {
+			t.Errorf("projects status = %q, want linked", res.Status)
+		}
+	}
+	info, err := os.Stat(filepath.Join(src, "projects"))
+	if err != nil || !info.IsDir() {
+		t.Fatalf("projects/ should be created in source: %v", err)
+	}
+	if _, err := os.Readlink(filepath.Join(dst, "projects")); err != nil {
+		t.Errorf("projects should be symlinked into target: %v", err)
+	}
+	// Non-ensured items keep the old "missing" behaviour.
+	if _, err := os.Stat(filepath.Join(src, "skills")); !os.IsNotExist(err) {
+		t.Errorf("skills must not be created in source, err = %v", err)
+	}
+}
+
+func TestLinkSharedItems_KeepsExistingProfileProjects(t *testing.T) {
+	src := seedSourceItems(t, "projects")
+	dst := t.TempDir()
+	own := filepath.Join(dst, "projects", "-old-session")
+	if err := os.MkdirAll(own, 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	results, err := linkSharedItems(src, dst)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, res := range results {
+		if res.Item == "projects" && res.Status != "skipped" {
+			t.Errorf("projects status = %q, want skipped", res.Status)
+		}
+	}
+	if _, err := os.Stat(own); err != nil {
+		t.Errorf("existing profile projects/ got touched: %v", err)
+	}
+}

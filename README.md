@@ -119,16 +119,25 @@ By default `ccs add` symlinks a small whitelist of "extension definition" or "pr
 | `hooks/` | Hook scripts |
 | `plugins/` | Installed plugin packages |
 | `settings.json` | Model / theme / permission preferences |
+| `projects/` | Per-project session transcripts and memory, so every account can list and `claude --resume` the same conversations. Created in `~/.claude` first if it doesn't exist yet, so sharing is in place before the first session. |
 
 **Never shared** (stays per-profile, as expected):
 
-`.credentials.json`, `projects/`, `todos/`, `statsig/`, `settings.local.json`, session files, lock files, and anything else not in the whitelist above. The list is a *whitelist*, so any new credential/state file Claude Code adds in the future stays isolated automatically.
+`.credentials.json`, `todos/`, `statsig/`, `settings.local.json`, session files, lock files, and anything else not in the whitelist above. The list is a *whitelist*, so any new credential/state file Claude Code adds in the future stays isolated automatically.
 
 **Safeguards**:
 
 - An entry already present in the new profile dir is **never overwritten** — symlink creation skips it.
 - If the new profile dir resolves to the same path as `~/.claude` itself, the share step is skipped entirely (no self-links).
 - Pass `--no-share` to skip the symlink step on a per-profile basis.
+
+**Existing profiles and `projects/`**: a profile that already has its own `projects/` keeps it (the never-overwrite rule above). To switch it to the shared history, merge it into `~/.claude/projects` and re-link:
+
+```bash
+dir="$(ccs path work)"
+rsync -a "$dir/projects/" ~/.claude/projects/   # session files are UUID-named, so merging is safe
+rm -rf "$dir/projects" && ln -s ~/.claude/projects "$dir/projects"
+```
 
 ```bash
 ccs add work                # symlinks shareable items by default
